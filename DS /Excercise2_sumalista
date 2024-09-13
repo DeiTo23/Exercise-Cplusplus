@@ -1,0 +1,73 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+struct lista {
+    int clave;
+    struct lista *sig;
+};
+
+// Función para sumar los elementos de ambas listas y crear una nueva lista
+struct lista* sumar_listas(struct lista *L1, struct lista *L2) {
+    struct lista *resultado = NULL; // Nueva lista con los resultados
+    struct lista **ultimo = &resultado; // Puntero al último nodo de la nueva lista
+    struct lista *p = L1;
+    struct lista *d = L2;
+
+    while (p != NULL && d != NULL) {
+        struct lista *nuevo_nodo = (struct lista *) malloc(sizeof(struct lista));
+        nuevo_nodo->clave = p->clave + d->clave;
+        *ultimo = nuevo_nodo;
+        ultimo = &nuevo_nodo->sig;
+        p = p->sig;
+        d = d->sig;
+    }
+    return resultado;
+}
+
+// Función para imprimir los elementos de una lista
+void imprimir_lista(struct lista *L) {
+    struct lista *p = L;
+
+    while (p != NULL) {
+        printf("%d, ", p->clave);
+        p = p->sig;
+    }
+    printf("\n");
+}
+
+int main(void) {
+    struct lista *L1, *L2, *resultado;
+    struct lista *p, *d;
+    int i;
+
+    // Crear la primera lista
+    L1 = NULL;
+    for (i = 5; i >= 1; i--) {
+        p = (struct lista *) malloc(sizeof(struct lista));
+        p->clave = i;
+        p->sig = L1;
+        L1 = p;
+    }
+
+    // Crear la segunda lista
+    L2 = NULL;
+    for (i = 10; i >= 6; i--) {
+        d = (struct lista *) malloc(sizeof(struct lista));
+        d->clave = i;
+        d->sig = L2;
+        L2 = d;
+    }
+
+    // Sumar los valores de ambas listas y crear la nueva lista
+    resultado = sumar_listas(L1, L2);
+
+    // Imprimir los valores de las listas
+    printf("Lista 1: ");
+    imprimir_lista(L1);
+    printf("Lista 2: ");
+    imprimir_lista(L2);
+    printf("Lista resultado: ");
+    imprimir_lista(resultado);
+
+    return 0;
+}
